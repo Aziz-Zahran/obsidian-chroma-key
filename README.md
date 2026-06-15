@@ -56,6 +56,6 @@ Perfect for screenshots, diagrams, and making your notes look clean, seamless, a
 ## Feedback & Support
 
 If this plugin saves you time and makes your notes look better, I'd really appreciate a star on GitHub! It helps others find the plugin and keeps me motivated to improve it.
-[![GitHub stars](https://img.shields.io/github/stars/Aziz-Zahran/obsidian-chroma-key?style=flat-square&logo=github&color=blue)](https://github.com/Aziz-Zahran/obsidian-chroma-key)
+[![GitHub stars](https://badgen.net/github/stars/Aziz-Zahran/obsidian-chroma-key?icon=github&color=blue)](https://github.com/Aziz-Zahran/obsidian-chroma-key)
 
 Got a bug or a feature request? Feel free to [open an issue](https://github.com/Aziz-Zahran/obsidian-chroma-key/issues) on the repository.
