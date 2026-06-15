@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "AGENTS.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "AGENTS"
+              "title": "README"
             }
           }
         ]
@@ -185,6 +185,7 @@
   },
   "active": "9062eaba37a178a4",
   "lastOpenFiles": [
+    "AGENTS.md",
     "README.md",
     "src/imgs/demo2.png",
     "src/imgs/demo.png",

@@ -53,6 +53,18 @@ Perfect for screenshots, diagrams, and making your notes look clean, seamless, a
 
 ---
 
+## Contributing
+
+Contributions are always welcome! If you'd like to help improve Chroma Key Paste:
+1. Fork the repository
+2. Clone your fork locally (`git clone https://github.com/YOUR_USERNAME/obsidian-chroma-key.git`)
+3. Run `npm install` to install dependencies
+4. Run `npm run dev` to start the build in watch mode
+5. Make your changes and test them in Obsidian
+6. Commit your changes and open a Pull Request!
+
+---
+
 ## Feedback & Support
 
 If this plugin saves you time and makes your notes look better, I'd really appreciate a star on GitHub! It helps others find the plugin and keeps me motivated to improve it.
