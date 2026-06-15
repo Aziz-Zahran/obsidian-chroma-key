@@ -65,9 +65,12 @@ Contributions are always welcome! If you'd like to help improve Chroma Key Paste
 
 ---
 
-## Feedback & Support
+## Support
 
-If this plugin saves you time and makes your notes look better, I'd really appreciate a star on GitHub! It helps others find the plugin and keeps me motivated to improve it.
-[![GitHub stars](https://badgen.net/github/stars/Aziz-Zahran/obsidian-chroma-key?icon=github&color=blue)](https://github.com/Aziz-Zahran/obsidian-chroma-key)
+Please consider supporting the plugin. There are many hours of work and effort behind it. The two easiest ways to support the plugin are either by starring ⭐ the repository or by donating any amount on [Ko-fi](https://ko-fi.com/azizzahran) ❤️. Thank you!
+
+<a href="https://ko-fi.com/azizzahran" target="_blank">
+    <img src="https://storage.ko-fi.com/cdn/brandasset/v2/support_me_on_kofi_beige.png" alt="Support me on Ko-fi" width="200"/>
+</a>
 
 Got a bug or a feature request? Feel free to [open an issue](https://github.com/Aziz-Zahran/obsidian-chroma-key/issues) on the repository.
