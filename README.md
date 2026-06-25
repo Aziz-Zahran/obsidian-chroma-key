@@ -1,53 +1,49 @@
-# Chroma Key Paste
-Easily remove the background from your pasted images directly within Obsidian.
-Perfect for screenshots, diagrams, and making your notes look clean, seamless, and professional.
-
-- remove backgrounds from images with a single click
-- seamlessly integrated into the right-click context menu
-- fine-tune with adjustable tolerance and edge softening
-- automatically detects the background color (or pick your own!)
-- keeps your vault clean by saving processed images to a dedicated folder
-
-**Before & After Example**
-
-![Before and After](src/imgs/demo.png)
-![Before and After 2](src/imgs/demo2.png)
-
-## Remove Backgrounds on Demand!
-
-- **Paste** your image into Obsidian as usual.
-- **Right Click** the image link in your note and select "Remove background".
-
-![Right click menu](src/imgs/context-menu.png)
-
-
-## Fine-tune your cutouts: The Processing Modal
+![Chroma Key Paste](src/imgs/v1.1.0.png)
 
 <p align="center">
-  <img src="src/imgs/modal.png" alt="Chroma Key Modal" width="600" />
+  Easily remove the background from your pasted images directly within Obsidian.<br>
+  Perfect for screenshots, diagrams, and making your notes look clean, seamless, and professional.
 </p>
-
-- Adjust the **Tolerance** slider to control how aggressively the color is removed.
-- Use **Edge softening** to create smooth alpha blending for cleaner results.
-- **Auto-detect** the background color from the top-left pixel, or specify an exact Hex code.
 
 ---
 
-### Removing a Background
-- Paste an image into your note normally.
-- Right-click the image embed (e.g., `![[Pasted image.png]]`) and select "Remove background".
-- Adjust the settings in the popup modal to your liking.
-- Click **Process** — the background is removed, saved as a new transparent PNG, and the link in your editor is automatically updated!
-- *Alternative:* Use the Command Palette and search for "Remove background from image" while your cursor is on an image link.
+### Features
 
-### Customizing the Defaults
-- Go to **Settings → Chroma Key Paste** to configure the default settings for the processing modal:
-  - **Auto-detect background color**: On/Off
-  - **Target color**: The hex color to remove (e.g., `#ffffff`)
-  - **Default tolerance**: 0 (exact match) to 100 (very aggressive)
-  - **Edge softening**: On/Off
+- **One-click background removal** — right-click any image and select "Remove background"
+- **Live preview** — see exactly what the result looks like before saving **(New in v1.1.0!)**
+- **Auto-detect background color** — samples the top-left pixel, or pick your own hex code
+- **Adjustable tolerance** — fine-tune how aggressively the color is removed
+- **Edge softening** — smooth alpha blending for cleaner cutouts
+- **Organized vault** — processed images are saved to a dedicated `chroma/` folder
 
-### Organizing Processed Images
+---
+
+### See it in action
+
+![Chroma Key Demo](src/imgs/Demo%20(2).gif)
+
+---
+
+### How to use
+
+1. **Paste** an image into your note as usual.
+2. **Right-click** the image embed (e.g., `![[Pasted image.png]]`) and select **"Remove background"**.
+3. **Adjust** the settings in the live preview modal to your liking.
+4. Click **Process** — the background is removed, saved as a new transparent PNG, and the link in your editor is automatically updated!
+
+> 💡 *Alternative:* Use the **Command Palette** and search for "Remove background from image" while your cursor is on an image link.
+
+### Customizing the defaults
+
+Go to **Settings → Chroma Key Paste** to configure the default settings for the processing modal:
+
+- **Auto-detect background color**: On/Off
+- **Target color**: The hex color to remove (e.g., `#ffffff`)
+- **Default tolerance**: 0 (exact match) to 100 (very aggressive)
+- **Edge softening**: On/Off
+
+### Organizing processed images
+
 - The plugin automatically saves your new transparent images into a `chroma/` folder to keep your vault tidy.
 - **Want to rename or move the folder?** Go ahead! The plugin automatically tracks the folder if you rename or move it anywhere inside your vault.
 

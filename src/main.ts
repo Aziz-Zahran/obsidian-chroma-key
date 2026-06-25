@@ -5,7 +5,7 @@ import { processImageBuffer } from './chroma-key';
 import { ChromaKeyModal } from './ui/chroma-modal';
 
 /** Map file extension to MIME type for canvas processing. */
-function extensionToMime(ext: string): string {
+export function extensionToMime(ext: string): string {
 	switch (ext.toLowerCase()) {
 		case 'png': return 'image/png';
 		case 'jpg':
@@ -99,7 +99,7 @@ export default class ChromaKeyPlugin extends Plugin {
 	 * Open the threshold modal and process the image on submit.
 	 */
 	private openProcessingModal(sourceFile: TFile): void {
-		new ChromaKeyModal(this.app, this.settings, (result) => {
+		new ChromaKeyModal(this.app, sourceFile, this.settings, (result) => {
 			const fullSettings: ChromaKeySettings = {
 				...result,
 				chromaFolderPath: this.settings.chromaFolderPath,

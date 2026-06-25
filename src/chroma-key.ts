@@ -31,7 +31,7 @@ function colorDistance(a: RGB, b: RGB): number {
 /**
  * Load a Blob into an HTMLImageElement.
  */
-function loadImageFromBlob(blob: Blob): Promise<HTMLImageElement> {
+export function loadImageFromBlob(blob: Blob): Promise<HTMLImageElement> {
 	return new Promise((resolve, reject) => {
 		const url = URL.createObjectURL(blob);
 		const img = new Image();
@@ -66,25 +66,8 @@ function canvasToArrayBuffer(canvas: HTMLCanvasElement): Promise<ArrayBuffer> {
  * Core chroma key processing on an HTMLImageElement.
  * Removes the target background color and returns a transparent PNG ArrayBuffer.
  */
-function processImageElement(
-	img: HTMLImageElement,
-	settings: ChromaKeySettings,
-): Promise<ArrayBuffer> {
-	const canvas = activeDocument.createElement('canvas');
-	canvas.width = img.width;
-	canvas.height = img.height;
-
-	const ctx = canvas.getContext('2d');
-	if (!ctx) {
-		throw new Error('Could not get 2D canvas context');
-	}
-
-	ctx.drawImage(img, 0, 0);
-
-	const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+export function applyChromaKey(imageData: ImageData, settings: ChromaKeySettings): void {
 	const data = imageData.data;
-
-	// Determine the target color to remove
 	let target: RGB;
 	if (settings.autoDetectColor) {
 		target = {
@@ -96,12 +79,12 @@ function processImageElement(
 		target = hexToRgb(settings.targetColor);
 	}
 
-	// Scale tolerance: 0–100 maps to color distance 0–441.67
+	const pixelCount = data.length / 4;
+
 	const maxDistance = 441.67;
 	const threshold = (settings.tolerance / 100) * maxDistance;
 	const softStart = threshold * 0.7;
 
-	const pixelCount = data.length / 4;
 	for (let i = 0; i < pixelCount; i++) {
 		const offset = i * 4;
 		const pixel: RGB = {
@@ -120,6 +103,25 @@ function processImageElement(
 			data[offset + 3] = Math.round(originalAlpha * factor);
 		}
 	}
+}
+
+function processImageElement(
+	img: HTMLImageElement,
+	settings: ChromaKeySettings,
+): Promise<ArrayBuffer> {
+	const canvas = activeDocument.createElement('canvas');
+	canvas.width = img.width;
+	canvas.height = img.height;
+
+	const ctx = canvas.getContext('2d');
+	if (!ctx) {
+		throw new Error('Could not get 2D canvas context');
+	}
+
+	ctx.drawImage(img, 0, 0);
+
+	const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+	applyChromaKey(imageData, settings);
 
 	ctx.putImageData(imageData, 0, 0);
 
