@@ -1,9 +1,11 @@
-![Chroma Key Paste](src/imgs/v1.1.0.png)
+# Chroma Key Paste
 
 <p align="center">
   Easily remove the background from your pasted images directly within Obsidian.<br>
   Perfect for screenshots, diagrams, and making your notes look clean, seamless, and professional.
 </p>
+
+![Chroma Key Paste](src/imgs/v1.1.0.png)
 
 ---
 
@@ -31,7 +33,8 @@
 3. **Adjust** the settings in the live preview modal to your liking.
 4. Click **Process** — the background is removed, saved as a new transparent PNG, and the link in your editor is automatically updated!
 
-> 💡 *Alternative:* Use the **Command Palette** and search for "Remove background from image" while your cursor is on an image link.
+> [!WARNING]
+> In some cases, the **"Remove Background"** may not appear in the context menu unless the cursor is on an image link.
 
 ### Customizing the defaults
 
