@@ -22,3 +22,8 @@
 	max-width: 100%;
 	object-fit: contain;
 }
+
+/* Crosshair cursor when eyedropper is active */
+.chroma-preview-canvas.chroma-eyedropper-active {
+	cursor: crosshair;
+}

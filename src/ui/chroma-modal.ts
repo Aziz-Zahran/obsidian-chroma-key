@@ -21,11 +21,12 @@ export class ChromaKeyModal extends Modal {
 	private file: TFile;
 	private settings: ChromaKeySettings;
 	private onSubmit: (result: ChromaModalResult) => void;
-	
+
 	private originalImageData: ImageData | null = null;
 	private previewCtx: CanvasRenderingContext2D | null = null;
 	private previewCanvas!: HTMLCanvasElement;
 	private settingsContainer!: HTMLDivElement;
+	private eyedropperActive = false;
 
 	constructor(
 		app: App,
@@ -51,6 +52,8 @@ export class ChromaKeyModal extends Modal {
 		this.previewCanvas = previewContainer.createEl('canvas', { cls: 'chroma-preview-canvas' });
 		this.previewCtx = this.previewCanvas.getContext('2d');
 
+		this.setupCanvasClick();
+
 		this.settingsContainer = contentEl.createDiv('settings-container');
 
 		// Load image data
@@ -68,12 +71,12 @@ export class ChromaKeyModal extends Modal {
 
 			this.previewCanvas.width = img.width;
 			this.previewCanvas.height = img.height;
-			
+
 			if (this.previewCtx) {
 				this.previewCtx.drawImage(img, 0, 0);
 				this.originalImageData = this.previewCtx.getImageData(0, 0, img.width, img.height);
 			}
-			
+
 			this.updatePreview();
 		} catch (error) {
 			console.error("Failed to load image for preview", error);
@@ -82,7 +85,7 @@ export class ChromaKeyModal extends Modal {
 
 	private updatePreview() {
 		if (!this.originalImageData || !this.previewCtx) return;
-		
+
 		// Clone the original data
 		const workingData = new ImageData(
 			new Uint8ClampedArray(this.originalImageData.data),
@@ -97,6 +100,47 @@ export class ChromaKeyModal extends Modal {
 		this.previewCtx.putImageData(workingData, 0, 0);
 	}
 
+	private setEyedropper(active: boolean) {
+		this.eyedropperActive = active;
+		this.previewCanvas.toggleClass('chroma-eyedropper-active', active);
+	}
+
+	private setupCanvasClick() {
+		this.previewCanvas.addEventListener('click', (event) => {
+			if (!this.eyedropperActive || !this.originalImageData) return;
+
+			const rect = this.previewCanvas.getBoundingClientRect();
+
+			// The canvas element size (CSS) vs internal resolution
+			const scaleX = this.previewCanvas.width / rect.width;
+			const scaleY = this.previewCanvas.height / rect.height;
+
+			const x = Math.floor((event.clientX - rect.left) * scaleX);
+			const y = Math.floor((event.clientY - rect.top) * scaleY);
+
+			// Extract color at (x, y)
+			const index = (y * this.previewCanvas.width + x) * 4;
+			const r = this.originalImageData.data[index]!;
+			const g = this.originalImageData.data[index + 1]!;
+			const b = this.originalImageData.data[index + 2]!;
+
+			// Convert to hex
+			const hexColor = "#" + [r, g, b]
+				.map(v => v.toString(16).padStart(2, '0'))
+				.join('')
+				.toUpperCase();
+
+			// Update settings and deactivate eyedropper
+			this.settings.targetColor = hexColor;
+			this.settings.autoDetectColor = false;
+			this.setEyedropper(false);
+
+			// Re-render
+			this.renderSettings();
+			this.updatePreview();
+		});
+	}
+
 	private renderSettings() {
 		this.settingsContainer.empty();
 
@@ -109,16 +153,19 @@ export class ChromaKeyModal extends Modal {
 					.setValue(this.settings.autoDetectColor)
 					.onChange((value) => {
 						this.settings.autoDetectColor = value;
+						if (value) {
+							this.setEyedropper(false);
+						}
 						this.updatePreview();
 						this.renderSettings(); // Re-render to show/hide color picker
 					}),
 			);
 
-		// Manual color (only when auto-detect is off)
+		// Manual color + eyedropper (only when auto-detect is off)
 		if (!this.settings.autoDetectColor) {
 			new Setting(this.settingsContainer)
 				.setName('Target color')
-				.setDesc('Hex color to remove (e.g. #Ffffff)')
+				.setDesc('Hex color to remove, or use the eyedropper to pick from the image')
 				.addText((text) =>
 					text
 						.setPlaceholder('#Ffffff')
@@ -129,6 +176,15 @@ export class ChromaKeyModal extends Modal {
 								this.settings.targetColor = cleaned;
 								this.updatePreview();
 							}
+						}),
+				)
+				.addButton((btn) =>
+					btn
+						.setIcon('pipette')
+						.setTooltip('Pick color from image')
+						.onClick(() => {
+							this.setEyedropper(!this.eyedropperActive);
+							btn.buttonEl.toggleClass('mod-cta', this.eyedropperActive);
 						}),
 				);
 		}
