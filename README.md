@@ -1,28 +1,25 @@
 # Chroma Key Paste
 
-<p align="center">
-  Easily remove the background from your pasted images directly within Obsidian.<br>
+  Easily remove the background from your pasted images directly within Obsidian.
   Perfect for screenshots, diagrams, and making your notes look clean, seamless, and professional.
-</p>
-
-![Chroma Key Paste](src/imgs/v1.1.0.png)
 
 ---
 
 ### Features
 
-- **One-click background removal** — right-click any image and select "Remove background"
-- **Live preview** — see exactly what the result looks like before saving **(New in v1.1.0!)**
-- **Auto-detect background color** — samples the top-left pixel, or pick your own hex code
-- **Adjustable tolerance** — fine-tune how aggressively the color is removed
-- **Edge softening** — smooth alpha blending for cleaner cutouts
-- **Organized vault** — processed images are saved to a dedicated `chroma/` folder
+- **One-click background removal**: Right-click any image and select "Remove background"
+- **Live preview**: See exactly what the result looks like before saving
+- **Eyedropper tool**: Click anywhere on the live preview to instantly pick the exact color you want to remove
+- **Auto-detect background color**: Samples the top-left pixel, or pick your own hex code
+- **Adjustable tolerance**: Fine-tune how aggressively the color is removed
+- **Edge softening**: Smooth alpha blending for cleaner cutouts
+- **Organized vault**: Processed images are saved to a dedicated `chroma/` folder
 
 ---
 
 ### See it in action
 
-![Chroma Key Demo](src/imgs/Demo%20(2).gif)
+![Chroma Key Demo](src/imgs/demo-1.2.0.gif)
 
 ---
 
@@ -31,7 +28,7 @@
 1. **Paste** an image into your note as usual.
 2. **Right-click** the image embed (e.g., `![[Pasted image.png]]`) and select **"Remove background"**.
 3. **Adjust** the settings in the live preview modal to your liking.
-4. Click **Process** — the background is removed, saved as a new transparent PNG, and the link in your editor is automatically updated!
+4. Click **Process**: The background is removed, saved as a new transparent PNG, and the link in your editor is automatically updated!
 
 > [!WARNING]
 > In some cases, the **"Remove Background"** may not appear in the context menu unless the cursor is on an image link.
