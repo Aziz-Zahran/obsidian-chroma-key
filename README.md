@@ -9,7 +9,8 @@
 
 - **One-click background removal**: Right-click any image and select "Remove background"
 - **Live preview**: See exactly what the result looks like before saving
-- **Eyedropper tool**: Click anywhere on the live preview to instantly pick the exact color you want to remove
+- **Eyedropper tool**: Click anywhere on the live preview to pick the exact color you want to remove
+- **Color inverter**: Flip the colors of your image with one toggle (great for dark mode diagrams)
 - **Auto-detect background color**: Samples the top-left pixel, or pick your own hex code
 - **Adjustable tolerance**: Fine-tune how aggressively the color is removed
 - **Edge softening**: Smooth alpha blending for cleaner cutouts
@@ -19,7 +20,7 @@
 
 ### See it in action
 
-![Chroma Key Demo](src/imgs/demo-1.2.0.gif)
+![Chroma Key Demo](src/imgs/demo-1.3.0.gif)
 
 ---
 
@@ -38,9 +39,10 @@
 Go to **Settings → Chroma Key Paste** to configure the default settings for the processing modal:
 
 - **Auto-detect background color**: On/Off
-- **Target color**: The hex color to remove (e.g., `#ffffff`)
+- **Target color**: The hex color to remove (e.g., `#FFFFFF`)
 - **Default tolerance**: 0 (exact match) to 100 (very aggressive)
 - **Edge softening**: On/Off
+- **Invert colors**: On/Off
 
 ### Organizing processed images
 

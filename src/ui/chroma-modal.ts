@@ -3,13 +3,11 @@ import type { ChromaKeySettings } from '../types';
 import { loadImageFromBlob, applyChromaKey } from '../chroma-key';
 import { extensionToMime } from '../main';
 
-/**
- * Result returned by the modal when the user clicks Process.
- */
 export interface ChromaModalResult {
 	tolerance: number;
 	autoDetectColor: boolean;
 	edgeSoftening: boolean;
+	invertColors: boolean;
 	targetColor: string;
 }
 
@@ -36,7 +34,6 @@ export class ChromaKeyModal extends Modal {
 	) {
 		super(app);
 		this.file = file;
-		// Clone defaults so the modal doesn't mutate the plugin settings
 		this.settings = { ...defaults };
 		this.onSubmit = onSubmit;
 	}
@@ -46,7 +43,6 @@ export class ChromaKeyModal extends Modal {
 		contentEl.empty();
 		this.setTitle('Remove background');
 
-		// Create a container for the preview
 		const previewContainer = contentEl.createDiv({ cls: 'chroma-preview-container' });
 
 		this.previewCanvas = previewContainer.createEl('canvas', { cls: 'chroma-preview-canvas' });
@@ -56,7 +52,6 @@ export class ChromaKeyModal extends Modal {
 
 		this.settingsContainer = contentEl.createDiv('settings-container');
 
-		// Load image data
 		await this.loadImageData();
 
 		this.renderSettings();
@@ -86,17 +81,14 @@ export class ChromaKeyModal extends Modal {
 	private updatePreview() {
 		if (!this.originalImageData || !this.previewCtx) return;
 
-		// Clone the original data
 		const workingData = new ImageData(
 			new Uint8ClampedArray(this.originalImageData.data),
 			this.originalImageData.width,
 			this.originalImageData.height
 		);
 
-		// Apply chroma key
 		applyChromaKey(workingData, this.settings);
 
-		// Draw to canvas
 		this.previewCtx.putImageData(workingData, 0, 0);
 	}
 
@@ -111,31 +103,26 @@ export class ChromaKeyModal extends Modal {
 
 			const rect = this.previewCanvas.getBoundingClientRect();
 
-			// The canvas element size (CSS) vs internal resolution
 			const scaleX = this.previewCanvas.width / rect.width;
 			const scaleY = this.previewCanvas.height / rect.height;
 
 			const x = Math.floor((event.clientX - rect.left) * scaleX);
 			const y = Math.floor((event.clientY - rect.top) * scaleY);
 
-			// Extract color at (x, y)
 			const index = (y * this.previewCanvas.width + x) * 4;
 			const r = this.originalImageData.data[index]!;
 			const g = this.originalImageData.data[index + 1]!;
 			const b = this.originalImageData.data[index + 2]!;
 
-			// Convert to hex
 			const hexColor = "#" + [r, g, b]
 				.map(v => v.toString(16).padStart(2, '0'))
 				.join('')
 				.toUpperCase();
 
-			// Update settings and deactivate eyedropper
 			this.settings.targetColor = hexColor;
 			this.settings.autoDetectColor = false;
 			this.setEyedropper(false);
 
-			// Re-render
 			this.renderSettings();
 			this.updatePreview();
 		});
@@ -144,7 +131,6 @@ export class ChromaKeyModal extends Modal {
 	private renderSettings() {
 		this.settingsContainer.empty();
 
-		// Auto-detect toggle
 		new Setting(this.settingsContainer)
 			.setName('Auto-detect background color')
 			.setDesc('Sample the top-left pixel as the background color')
@@ -157,11 +143,10 @@ export class ChromaKeyModal extends Modal {
 							this.setEyedropper(false);
 						}
 						this.updatePreview();
-						this.renderSettings(); // Re-render to show/hide color picker
+						this.renderSettings();
 					}),
 			);
 
-		// Manual color + eyedropper (only when auto-detect is off)
 		if (!this.settings.autoDetectColor) {
 			new Setting(this.settingsContainer)
 				.setName('Target color')
@@ -189,7 +174,6 @@ export class ChromaKeyModal extends Modal {
 				);
 		}
 
-		// Edge softening toggle
 		new Setting(this.settingsContainer)
 			.setName('Edge softening')
 			.setDesc('Smooth alpha blending at background edges')
@@ -202,7 +186,18 @@ export class ChromaKeyModal extends Modal {
 					}),
 			);
 
-		// Tolerance slider
+		new Setting(this.settingsContainer)
+			.setName('Invert colors')
+			.setDesc('Invert colors of visible pixels (great for dark mode diagrams)')
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.settings.invertColors)
+					.onChange((value) => {
+						this.settings.invertColors = value;
+						this.updatePreview();
+					}),
+			);
+
 		new Setting(this.settingsContainer)
 			.setName('Tolerance')
 			.setDesc('Color distance threshold (0 = exact match, 100 = aggressive)')
@@ -217,7 +212,6 @@ export class ChromaKeyModal extends Modal {
 					}),
 			);
 
-		// Action buttons
 		new Setting(this.settingsContainer)
 			.addButton((btn) =>
 				btn
@@ -229,6 +223,7 @@ export class ChromaKeyModal extends Modal {
 							tolerance: this.settings.tolerance,
 							autoDetectColor: this.settings.autoDetectColor,
 							edgeSoftening: this.settings.edgeSoftening,
+							invertColors: this.settings.invertColors,
 							targetColor: this.settings.targetColor,
 						});
 					}),

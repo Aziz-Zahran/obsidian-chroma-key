@@ -23,13 +23,10 @@ export default class ChromaKeyPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
-		// Settings tab
 		this.addSettingTab(new ChromaKeySettingTab(this.app, this));
 
-		// Add "Remove background" to the right-click context menu on image files
 		this.registerEvent(
 			this.app.workspace.on('file-menu', (menu, file) => {
-				// Only show for image files
 				if (!(file instanceof TFile)) return;
 				if (!IMAGE_EXTENSIONS.includes(file.extension.toLowerCase())) return;
 
@@ -50,13 +47,11 @@ export default class ChromaKeyPlugin extends Plugin {
 				if (!(file instanceof TFolder)) return;
 				if (oldPath !== this.settings.chromaFolderPath) return;
 
-				// The chroma folder was renamed or moved — update the stored path
 				this.settings.chromaFolderPath = file.path;
 				void this.saveSettings();
 			}),
 		);
 
-		// Also add a command palette entry for the currently active file
 		this.addCommand({
 			id: 'remove-background',
 			name: 'Remove background from image',
@@ -95,9 +90,6 @@ export default class ChromaKeyPlugin extends Plugin {
 		return match?.[1] ?? null;
 	}
 
-	/**
-	 * Open the threshold modal and process the image on submit.
-	 */
 	private openProcessingModal(sourceFile: TFile): void {
 		new ChromaKeyModal(this.app, sourceFile, this.settings, (result) => {
 			const fullSettings: ChromaKeySettings = {
@@ -119,21 +111,17 @@ export default class ChromaKeyPlugin extends Plugin {
 		new Notice('Processing image background…');
 
 		try {
-			// Read the source image from the vault
 			const buffer = await this.app.vault.readBinary(sourceFile);
 			const mimeType = extensionToMime(sourceFile.extension);
 
-			// Process the image
 			const processedBuffer = await processImageBuffer(buffer, mimeType, settings);
 
-			// Ensure the output folder exists
 			const folderPath = this.settings.chromaFolderPath;
 			const chromaFolder = this.app.vault.getAbstractFileByPath(folderPath);
 			if (!chromaFolder) {
 				await this.app.vault.createFolder(folderPath);
 			}
 
-			// Generate filename
 			const baseName = sourceFile.basename;
 			const dateString = new Date()
 				.toISOString()
@@ -141,7 +129,6 @@ export default class ChromaKeyPlugin extends Plugin {
 			const newFileName = `${baseName}-chroma-${dateString}.png`;
 			const savePath = `${folderPath}/${newFileName}`;
 
-			// Save the processed image
 			const newFile = await this.app.vault.createBinary(savePath, processedBuffer);
 
 			// Replace the embed in the active editor
@@ -150,7 +137,6 @@ export default class ChromaKeyPlugin extends Plugin {
 				const editor = view.editor;
 				const content = editor.getValue();
 
-				// Find and replace the original embed with the new one
 				// Handle both ![[name]] and ![[path/name]] formats
 				const oldEmbed = `![[${sourceFile.name}]]`;
 				const oldEmbedPath = `![[${sourceFile.path}]]`;

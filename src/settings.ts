@@ -22,7 +22,6 @@ export class ChromaKeySettingTab extends PluginSettingTab {
 			cls: 'setting-item-description',
 		});
 
-		// Auto-detect toggle
 		new Setting(containerEl)
 			.setName('Auto-detect background color')
 			.setDesc(
@@ -38,7 +37,6 @@ export class ChromaKeySettingTab extends PluginSettingTab {
 					}),
 			);
 
-		// Manual target color (only visible when auto-detect is off)
 		if (!this.plugin.settings.autoDetectColor) {
 			new Setting(containerEl)
 				.setName('Target color')
@@ -59,7 +57,6 @@ export class ChromaKeySettingTab extends PluginSettingTab {
 				);
 		}
 
-		// Tolerance slider
 		new Setting(containerEl)
 			.setName('Default tolerance')
 			.setDesc(
@@ -76,7 +73,6 @@ export class ChromaKeySettingTab extends PluginSettingTab {
 					}),
 			);
 
-		// Edge softening toggle
 		new Setting(containerEl)
 			.setName('Edge softening')
 			.setDesc(
@@ -87,6 +83,20 @@ export class ChromaKeySettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.edgeSoftening)
 					.onChange(async (value) => {
 						this.plugin.settings.edgeSoftening = value;
+						await this.plugin.saveSettings();
+					}),
+			);
+
+		new Setting(containerEl)
+			.setName('Invert colors')
+			.setDesc(
+				'Invert the colors of visible pixels after background removal.',
+			)
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.invertColors)
+					.onChange(async (value) => {
+						this.plugin.settings.invertColors = value;
 						await this.plugin.saveSettings();
 					}),
 			);

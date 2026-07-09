@@ -20,6 +20,8 @@ export interface ChromaKeySettings {
 	autoDetectColor: boolean;
 	/** If true, apply smooth alpha falloff at background edges. */
 	edgeSoftening: boolean;
+	/** If true, invert the RGB colors of visible pixels. */
+	invertColors: boolean;
 	/** Vault path where processed images are saved. Tracked across renames. */
 	chromaFolderPath: string;
 }
@@ -29,6 +31,7 @@ export const DEFAULT_SETTINGS: ChromaKeySettings = {
 	tolerance: 30,
 	autoDetectColor: true,
 	edgeSoftening: true,
+	invertColors: false,
 	chromaFolderPath: 'chroma',
 };
 

@@ -5,7 +5,6 @@ import type { ChromaKeySettings, RGB } from './types';
  */
 function hexToRgb(hex: string): RGB {
 	let cleaned = hex.replace('#', '');
-	// Expand shorthand "#FFF" → "FFFFFF"
 	if (cleaned.length === 3) {
 		cleaned = cleaned[0]! + cleaned[0]! + cleaned[1]! + cleaned[1]! + cleaned[2]! + cleaned[2]!;
 	}
@@ -17,10 +16,6 @@ function hexToRgb(hex: string): RGB {
 	};
 }
 
-/**
- * Compute the Euclidean color distance between two RGB colors.
- * Max possible distance is ~441.67 (black to white).
- */
 function colorDistance(a: RGB, b: RGB): number {
 	const dr = a.r - b.r;
 	const dg = a.g - b.g;
@@ -28,9 +23,6 @@ function colorDistance(a: RGB, b: RGB): number {
 	return Math.sqrt(dr * dr + dg * dg + db * db);
 }
 
-/**
- * Load a Blob into an HTMLImageElement.
- */
 export function loadImageFromBlob(blob: Blob): Promise<HTMLImageElement> {
 	return new Promise((resolve, reject) => {
 		const url = URL.createObjectURL(blob);
@@ -47,9 +39,6 @@ export function loadImageFromBlob(blob: Blob): Promise<HTMLImageElement> {
 	});
 }
 
-/**
- * Convert a canvas to an ArrayBuffer containing PNG data.
- */
 function canvasToArrayBuffer(canvas: HTMLCanvasElement): Promise<ArrayBuffer> {
 	return new Promise((resolve, reject) => {
 		canvas.toBlob((blob) => {
@@ -103,6 +92,17 @@ export function applyChromaKey(imageData: ImageData, settings: ChromaKeySettings
 			data[offset + 3] = Math.round(originalAlpha * factor);
 		}
 	}
+
+	if (settings.invertColors) {
+		for (let i = 0; i < pixelCount; i++) {
+			const offset = i * 4;
+			if (data[offset + 3]! > 0) {
+				data[offset] = 255 - data[offset]!;
+				data[offset + 1] = 255 - data[offset + 1]!;
+				data[offset + 2] = 255 - data[offset + 2]!;
+			}
+		}
+	}
 }
 
 function processImageElement(
@@ -128,10 +128,6 @@ function processImageElement(
 	return canvasToArrayBuffer(canvas);
 }
 
-/**
- * Process an image from an ArrayBuffer (read from the vault).
- * Returns a transparent PNG as an ArrayBuffer.
- */
 export async function processImageBuffer(
 	buffer: ArrayBuffer,
 	mimeType: string,
